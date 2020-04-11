@@ -1,11 +1,15 @@
 package kniznica;
 
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+
+import java.io.IOException;
 import java.sql.ResultSet;
 
 import java.net.URL;
@@ -32,22 +36,30 @@ public class MainWindow implements Initializable {
                 String author = rs.getString("Author");
                 int read = rs.getInt("Read");
                 boolean isReading = rs.getBoolean("IsReading");
-                Pane pane = new Pane();
-                ImageView imageView = new ImageView(database.loadImage(book, genre));
-                imageView.setFitHeight(200);
-                imageView.setFitWidth(150);
-                VBox box = new VBox();
-                box.getChildren().add(imageView);
-                box.getChildren().add(new Label(book));
-                box.getChildren().add(new Label(author));
-                box.getChildren().add(new Label(genre));
-                box.getChildren().add(new Label(Integer.toString(read)));
-                box.getChildren().add(new Label(Boolean.toString(isReading)));
-                grid.getChildren().add(box);
+                createBookWindow(book, genre, author, read, isReading);
+
             }
         }catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
         }
+    }
+
+    private void createBookWindow(String book, String genre, String author,
+                                  int read, boolean isReading) throws IOException {
+        ImageView imageView = new ImageView(database.loadImage(book, genre));
+        imageView.setFitHeight(250);
+        imageView.setFitWidth(150);
+        HBox hbox = new HBox();
+        VBox box = new VBox();
+        hbox.getChildren().add(imageView);
+        box.getChildren().add(new Label(book));
+        box.getChildren().add(new Label(author));
+        box.getChildren().add(new Label(genre));
+        box.getChildren().add(new Label(Integer.toString(read)));
+        box.getChildren().add(new Label(Boolean.toString(isReading)));
+        hbox.getChildren().add(box);
+        grid.setGridLinesVisible(true);
+        grid.getChildren().add(hbox);
     }
 }
