@@ -70,20 +70,15 @@ public class Database {
 
         String url = "https://www.pantarhei.sk/knihy/beletria/" + builder1.toString() + "/" + builder2.toString() + ".html";
         Document doc = Jsoup.connect(url).get();
-
-        String image = "";
         Elements images = doc.getElementsByTag("img");
         for(Element src : images){
             String string = src.attr("abs:src");
-            if(string.contains(builder2.toString())){
-                image = string;
-                System.out.println(image);
-                break;
-            } else {
-                image = string;
+            if(string.contains("builder2.toString()")){
+                return new Image(string);
             }
         }
-        return new Image(image);
+        File file = new File(System.getProperty("user.dir") + "/static/images/not_found.png");
+        return new Image(file.toURI().toString());
     }
 
 
